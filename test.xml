@@ -1,0 +1,86 @@
+<mujoco model="editor_data_mj_spec">
+  <compiler angle="radian"/>
+
+  <asset>
+    <mesh name="ekk7552gle_m0" content_type="model/obj" file="my_assets/ekk7552gle_m0.obj"/>
+    <mesh name="2h808ncmk2_m0" content_type="model/obj" file="my_assets/2h808ncmk2_m0.obj"/>
+    <mesh name="33ic2kf1j3_m0" content_type="model/obj" file="my_assets/33ic2kf1j3_m0.obj"/>
+    <mesh name="m18bmkl6f8_m0" content_type="model/obj" file="my_assets/m18bmkl6f8_m0.obj"/>
+    <mesh name="k55dj5llk7_m0" content_type="model/obj" file="my_assets/k55dj5llk7_m0.obj"/>
+    <mesh name="h78f75ee8f_m0" content_type="model/obj" file="my_assets/h78f75ee8f_m0.obj"/>
+    <mesh name="faban49gf0_m0" content_type="model/obj" file="my_assets/faban49gf0_m0.obj"/>
+    <mesh name="db1g38j2k0_m0" content_type="model/obj" file="my_assets/db1g38j2k0_m0.obj"/>
+    <mesh name="db1g38j2k0_m1" content_type="model/obj" file="my_assets/db1g38j2k0_m1.obj"/>
+    <mesh name="db1g38j2k0_m2" content_type="model/obj" file="my_assets/db1g38j2k0_m2.obj"/>
+    <mesh name="db1g38j2k0_m3" content_type="model/obj" file="my_assets/db1g38j2k0_m3.obj"/>
+    <mesh name="db1g38j2k0_m4" content_type="model/obj" file="my_assets/db1g38j2k0_m4.obj"/>
+    <mesh name="db1g38j2k0_m5" content_type="model/obj" file="my_assets/db1g38j2k0_m5.obj"/>
+    <mesh name="94d44fa58i_m0" content_type="model/obj" file="my_assets/94d44fa58i_m0.obj"/>
+    <mesh name="94d44fa58i_m1" content_type="model/obj" file="my_assets/94d44fa58i_m1.obj"/>
+    <mesh name="94d44fa58i_m2" content_type="model/obj" file="my_assets/94d44fa58i_m2.obj"/>
+    <mesh name="94d44fa58i_m3" content_type="model/obj" file="my_assets/94d44fa58i_m3.obj"/>
+    <mesh name="94d44fa58i_m4" content_type="model/obj" file="my_assets/94d44fa58i_m4.obj"/>
+    <mesh name="94d44fa58i_m5" content_type="model/obj" file="my_assets/94d44fa58i_m5.obj"/>
+    <mesh name="6f3d4719n3_m0" content_type="model/obj" file="my_assets/6f3d4719n3_m0.obj"/>
+    <mesh name="6f3d4719n3_m1" content_type="model/obj" file="my_assets/6f3d4719n3_m1.obj"/>
+    <mesh name="6f3d4719n3_m2" content_type="model/obj" file="my_assets/6f3d4719n3_m2.obj"/>
+    <mesh name="6f3d4719n3_m3" content_type="model/obj" file="my_assets/6f3d4719n3_m3.obj"/>
+    <mesh name="6f3d4719n3_m4" content_type="model/obj" file="my_assets/6f3d4719n3_m4.obj"/>
+    <mesh name="6f3d4719n3_m5" content_type="model/obj" file="my_assets/6f3d4719n3_m5.obj"/>
+  </asset>
+
+  <worldbody>
+    <body name="ekk7552gle" pos="-291 0 -9" quat="0.707107 0 0.707107 0">
+      <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="ekk7552gle_m0"/>
+      <body name="db1g38j2k0" pos="160.667 -20 291" quat="0.707107 0 -0.707107 0">
+        <joint name="joint_db1g38j2k0" pos="-300 0 -80.3333" axis="0 1 0" type="slide"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="db1g38j2k0_m0"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="db1g38j2k0_m1"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="db1g38j2k0_m2"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="db1g38j2k0_m3"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="db1g38j2k0_m4"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="db1g38j2k0_m5"/>
+      </body>
+      <body name="94d44fa58i" pos="-40 -20 291" quat="0.707107 0 -0.707107 0">
+        <joint name="joint_94d44fa58i" pos="-300 0 -81" axis="0 1 0" type="slide"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="94d44fa58i_m0"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="94d44fa58i_m1"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="94d44fa58i_m2"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="94d44fa58i_m3"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="94d44fa58i_m4"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="94d44fa58i_m5"/>
+      </body>
+      <body name="6f3d4719n3" pos="-240.667 -20 291" quat="0.707107 0 -0.707107 0">
+        <joint name="joint_6f3d4719n3" pos="-300 0 -91.6667" axis="0 1 0" type="slide"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="6f3d4719n3_m0"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="6f3d4719n3_m1"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="6f3d4719n3_m2"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="6f3d4719n3_m3"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="6f3d4719n3_m4"/>
+        <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="6f3d4719n3_m5"/>
+      </body>
+    </body>
+    <body name="2h808ncmk2" pos="291 0 -9" quat="0.707107 0 0.707107 0">
+      <geom type="mesh" rgba="0.5 0.5 1 1" mesh="2h808ncmk2_m0"/>
+    </body>
+    <body name="33ic2kf1j3" pos="0 -9 341">
+      <geom type="mesh" rgba="0.5 0.5 1 1" mesh="33ic2kf1j3_m0"/>
+    </body>
+    <body name="m18bmkl6f8" pos="0 0 -261">
+      <geom type="mesh" rgba="0.5 0.5 1 1" mesh="m18bmkl6f8_m0"/>
+    </body>
+    <body name="k55dj5llk7" pos="0 189 -310" quat="0.707107 0.707107 0 0">
+      <geom type="mesh" rgba="0.5 0.5 1 1" mesh="k55dj5llk7_m0"/>
+    </body>
+    <body name="h78f75ee8f" pos="0 -189 -310" quat="0.707107 0.707107 0 0">
+      <geom type="mesh" rgba="0.5 0.5 1 1" mesh="h78f75ee8f_m0"/>
+    </body>
+    <body name="faban49gf0" pos="0 184.5 40" quat="0.5 0.5 0.5 -0.5">
+      <geom type="mesh" rgba="0.5 0.5 1 1" mesh="faban49gf0_m0"/>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <general name="actuator_db1g38j2k0" joint="joint_db1g38j2k0"/>
+  </actuator>
+</mujoco>

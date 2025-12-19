@@ -1,0 +1,59 @@
+{
+  "customAuxiliaries": [
+    {
+      "instanceId": "100",
+      "auxiliaryType": 2,
+      "position": { "x": 0, "y": 0, "z": 0 },
+      "rotate": { "x": 0, "y": 0, "z": 0 },
+      "paramBizProperties": [
+        { "key": "hkglwt", "value": "Room_Ground", "valueType": "string" },
+        { "key": "hgzzmx", "value": "Cabinet_Body", "valueType": "string" },
+        { "key": "hingeActuator", "value": "false", "valueType": "boolean" }
+      ]
+    },
+    {
+      "instanceId": "101",
+      "auxiliaryType": 2,
+      "position": { "x": 0, "y": 100, "z": 50 },
+      "rotate": { "x": 0, "y": 0, "z": 0 },
+      "paramBizProperties": [
+        { "key": "hkglwt", "value": "Cabinet_Body", "valueType": "string" },
+        { "key": "hgzzmx", "value": "Top_Drawer", "valueType": "string" },
+        { "key": "hingeActuator", "value": "true", "valueType": "boolean" }
+      ]
+    },
+    {
+      "instanceId": "102",
+      "auxiliaryType": 2,
+      "position": { "x": 0, "y": 100, "z": 60 },
+      "rotate": { "x": 0, "y": 0, "z": 0 },
+      "paramBizProperties": [
+        { "key": "hkglwt", "value": "Top_Drawer", "valueType": "string" },
+        { "key": "hgzzmx", "value": "Drawer_Handle", "valueType": "string" },
+        { "key": "hingeActuator", "value": "false", "valueType": "boolean" }
+      ]
+    },
+    {
+      "instanceId": "103",
+      "auxiliaryType": 2,
+      "position": { "x": 0, "y": 80, "z": 60 },
+      "rotate": { "x": 0, "y": 0, "z": 0 },
+      "paramBizProperties": [
+        { "key": "hkglwt", "value": "Drawer_Handle", "valueType": "string" },
+        { "key": "hgzzmx", "value": "Handle_Decoration", "valueType": "string" },
+        { "key": "hingeActuator", "value": "false", "valueType": "boolean" }
+      ]
+    },
+    {
+      "instanceId": "104",
+      "auxiliaryType": 2,
+      "position": { "x": 50, "y": 50, "z": 50 },
+      "rotate": { "x": 0, "y": 90, "z": 0 },
+      "paramBizProperties": [
+        { "key": "hkglwt", "value": "Cabinet_Body", "valueType": "string" },
+        { "key": "hgzzmx", "value": "Side_Door", "valueType": "string" },
+        { "key": "hingeActuator", "value": "true", "valueType": "boolean" }
+      ]
+    }
+  ]
+}

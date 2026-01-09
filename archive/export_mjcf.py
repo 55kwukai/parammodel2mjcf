@@ -6,17 +6,41 @@ from collections import defaultdict
 import os
 from typing import List, Dict, Set, Tuple, Optional, Any
 import parse_editor3d_json
-
-
-
+from dataclasses import dataclass, field
 
 # 字段映射配置：原字段名 -> 新字段名
 PROPERTY_MAPPING = {
-    "hkglwt": "parent_body",       # 滑块关联模型 -> 父物体
-    "hgzzmx": "current_body",      # 滑轨终止模型 -> 当前物体
-    "hingeActuator": "hinge_actuator", # 保持原名
-    "mdfwtest": "actuator_range"      # 马达范围 (可选优化)
+    "hkglwt": "parent_body",  # 滑块关联模型 -> 父物体
+    "hgzzmx": "current_body",  # 滑轨终止模型 -> 当前物体
+    "hingeActuator": "has_actuator",  # 有无马达
+    "mdfwtest": "actuator_range"  # 马达范围 (可选优化)
 }
+
+
+@dataclass
+class Pose:
+    pos: np.ndarray = field(default_factory=lambda: np.zeros(3))
+    quat: np.ndarray = field(default_factory=lambda: np.array([1., 0., 0., 0.]))
+
+
+def get_local_pose(parent_pose: Pose, child_pose: Pose) -> Pose:
+    """
+    计算子物体相对于父物体的局部变换 (Pos, Quat)
+    """
+    # 1. 计算父物体旋转的逆 (共轭四元数: w, -x, -y, -z)
+    inv_parent_quat = np.array([parent_pose.quat[0], -parent_pose.quat[1], -parent_pose.quat[2], -parent_pose.quat[3]])
+
+    # 2. 计算相对位置: R_parent_inv * (P_child - P_parent)
+    diff_pos = child_pose.pos - parent_pose.pos
+    local_pos = np.zeros(3)
+    mujoco.mju_rotVecQuat(local_pos, diff_pos, inv_parent_quat)
+
+    # 3. 计算相对旋转: R_parent_inv * R_child
+    local_quat = np.zeros(4)
+    mujoco.mju_mulQuat(local_quat, inv_parent_quat, child_pose.quat)
+
+    return Pose(local_pos, local_quat)
+
 
 def normalize_auxiliaries(json_path: str) -> List[Dict]:
     """
@@ -105,7 +129,7 @@ def print_auxiliaries(auxiliaries: List[Dict]):
         pos_str = f"[{aux['position'][0]}, {aux['position'][1]}, {aux['position'][2]}]"
 
         # 获取属性，提供默认值以防缺失
-        has_motor = "Yes" if aux.get("hinge_actuator") else "No"
+        has_motor = "Yes" if aux.get("has_actuator") else "No"
         p_body = str(aux.get("parent_body", "N/A"))
         c_body = str(aux.get("current_body", "N/A"))
 
@@ -121,8 +145,7 @@ def print_auxiliaries(auxiliaries: List[Dict]):
     print("-" * len(header))
 
 
-
-def build_topology_tree(auxiliaries: List[Dict]) -> List[Dict]:
+def build_topology(auxiliaries: List[Dict]) -> List[Dict]:
     """
     根据 auxiliaries 列表构建拓扑树。
 
@@ -163,7 +186,7 @@ def build_topology_tree(auxiliaries: List[Dict]) -> List[Dict]:
 
         adj_list[p_body].append({
             "child_id": c_body,
-            "aux_data": aux
+            "aux": aux
         })
 
     # 2. 寻找根节点 (Roots)
@@ -187,7 +210,7 @@ def build_topology_tree(auxiliaries: List[Dict]) -> List[Dict]:
         # 查找该 body 下挂载的所有子 body
         if body_id in adj_list:
             for item in adj_list[body_id]:
-                child_node = _build_node(item["child_id"], item["aux_data"])
+                child_node = _build_node(item["child_id"], item["aux"])
                 node["children"].append(child_node)
 
         return node
@@ -200,7 +223,7 @@ def build_topology_tree(auxiliaries: List[Dict]) -> List[Dict]:
     return forest
 
 
-def print_topology_tree(trees: List[Dict]):
+def print_topology(trees: List[Dict]):
     """
     以图形化树状结构打印拓扑关系。
     """
@@ -225,7 +248,7 @@ def print_topology_tree(trees: List[Dict]):
         # 2. 提取连接信息 (如果不是根节点)
         info_str = f"[{body_id}]"
         if link:
-            motor = " (Motor)" if link.get('hinge_actuator') else ""
+            motor = " (Motor)" if link.get('has_actuator') else ""
 
             # 显示格式: └── [JointType: ID] -> [BodyID] (Motor?)
             display_str = f"{prefix}{connector} -> \033[1m{info_str}\033[0m{motor}"
@@ -330,46 +353,34 @@ class MujocoBuilderWithMesh:
             return mujoco.mjtJoint.mjJNT_HINGE
         return None
 
-    def _get_local_pose(self, parent_abs_pos, parent_abs_quat, child_abs_pos, child_abs_quat):
-        """
-        计算子物体相对于父物体的局部变换 (Pos, Quat)
-        """
-        # 1. 计算父物体旋转的逆 (共轭四元数: w, -x, -y, -z)
-        inv_parent_quat = np.array([parent_abs_quat[0], -parent_abs_quat[1], -parent_abs_quat[2], -parent_abs_quat[3]])
+    def _get_abs_pose_from_instance(self, body_id: str) -> Pose:
+        body_pos = np.array([0.0, 0.0, 0.0])
+        body_quat = np.array([1.0, 0.0, 0.0, 0.0])
 
-        # 2. 计算相对位置: R_parent_inv * (P_child - P_parent)
-        diff_pos = child_abs_pos - parent_abs_pos
-        local_pos = np.zeros(3)
-        mujoco.mju_rotVecQuat(local_pos, diff_pos, inv_parent_quat)
+        if body_id in self.instance_map:
+            inst = self.instance_map[body_id]
+            body_pos = np.array(inst['position'])
+            if 'rotation' in inst:
+                mujoco.mju_euler2Quat(body_quat, np.array(inst['rotation']), "XYZ")
+        
+        return Pose(body_pos, body_quat)
 
-        # 3. 计算相对旋转: R_parent_inv * R_child
-        local_quat = np.zeros(4)
-        mujoco.mju_mulQuat(local_quat, inv_parent_quat, child_abs_quat)
-
-        return local_pos, local_quat
-
-    def _add_body_recursive(self, parent_body, node: Dict, parent_abs_pos, parent_abs_quat):
+    def _add_body_recursive(self, parent_body, node: Dict, parent_abs_pose: Pose):
         body_id = node["body_id"]
         link_data = node.get("link_data")
         self.processed_ids.add(body_id)
 
         # 1. 创建 Body (容器)
         # -------------------------------------------------
-        body_pos = np.array([0.0, 0.0, 0.0])
-        body_quat = np.array([1.0, 0.0, 0.0, 0.0])
-
-        # 从 Instance 获取 Body 的位姿 (假设是相对坐标，且为弧度)
-        if body_id in self.instance_map:
-            inst = self.instance_map[body_id]
-            body_pos = np.array(inst['position'])
-            # 弧度转四元数
-            if 'rotation' in inst:
-                mujoco.mju_euler2Quat(body_quat, np.array(inst['rotation']), "XYZ")
-        rel_pos, rel_quat = self._get_local_pose(parent_abs_pos, parent_abs_quat, body_pos, body_quat)
+        # 从 Instance 获取 Body 的位姿 (输入是绝对坐标，且为弧度)
+        current_abs_pose = self._get_abs_pose_from_instance(body_id)
+        
+        rel_pose = get_local_pose(parent_abs_pose, current_abs_pose)
+        
         current_body = parent_body.add_body()
         current_body.name = body_id
-        current_body.pos = rel_pos
-        current_body.quat = rel_quat
+        current_body.pos = rel_pose.pos
+        current_body.quat = rel_pose.quat
         current_body.mass = 1.0
 
         # 2. 添加 Geoms (支持一个 Body 包含多个 Meshes)
@@ -390,31 +401,44 @@ class MujocoBuilderWithMesh:
         # -------------------------------------------------
         if link_data:
             j_type = self._get_joint_enum(link_data.get("joint_type", ""))
+            ctrl_range_min, ctrl_range_max = map(float, link_data.get("actuator_range").strip('{}').split(','))
+
             if j_type is not None:
                 joint = current_body.add_joint()
                 joint.name = f"joint_{body_id}"
                 joint.type = j_type
+                joint.range[:] = [ctrl_range_min, ctrl_range_max]
 
                 if "position" in link_data:
                     joint_pos = np.array(link_data["position"])
-                    joint_local_pos, _ = self._get_local_pose(body_pos, body_quat, joint_pos,
-                                                              np.array([1., 0., 0., 0.]))
-                    joint.pos = joint_local_pos
+                    # 构造 Joint 的绝对 Pose (旋转默认为单位四元数，因为只关心位置)
+                    joint_abs_pose = Pose(joint_pos, np.array([1., 0., 0., 0.]))
+                    
+                    # Joint 的位置也是相对于 Body 的
+                    joint_local_pose = get_local_pose(current_abs_pose, joint_abs_pose)
+                    joint.pos = joint_local_pose.pos
 
                 if "rotation" in link_data:
                     joint.axis = np.array(link_data["rotation"])
                 else:
                     joint.axis = np.array([0, 0, 1])
 
-                if link_data.get("hinge_actuator"):
+                if link_data.get("has_actuator"):
                     act = self.spec.add_actuator()
                     act.name = f"actuator_{body_id}"
                     act.trntype = mujoco.mjtTrn.mjTRN_JOINT
                     act.target = joint.name
+                    kp = 2000
+                    act.dyntype = mujoco.mjtDyn.mjDYN_NONE
+                    act.gaintype = mujoco.mjtGain.mjGAIN_FIXED
+                    act.gainprm[0] = kp
+                    act.biastype = mujoco.mjtBias.mjBIAS_AFFINE
+                    act.biasprm[1] = -kp  # -kp * qpos
+                    act.ctrlrange[:] = [ctrl_range_min, ctrl_range_max]
 
         # 4. 递归子节点
         for child in node.get("children", []):
-            self._add_body_recursive(current_body, child, body_pos, body_quat)
+            self._add_body_recursive(current_body, child, current_abs_pose)
 
     def build(self, topology_forest: List[Dict], instances: List[Dict]):
         """
@@ -425,10 +449,10 @@ class MujocoBuilderWithMesh:
 
         # 2. 构建拓扑树 (处理有父子关系的 Body)
         # 根节点直接挂在 Worldbody 下
-        world_pos = np.array([0.0, 0.0, 0.0])
-        world_quat = np.array([1.0, 0.0, 0.0, 0.0])
+        world_pose = Pose() # 默认为原点和单位旋转
+        
         for root_node in topology_forest:
-            self._add_body_recursive(self.spec.worldbody, root_node,world_pos,world_quat)
+            self._add_body_recursive(self.spec.worldbody, root_node, world_pose)
 
         # 3. 处理孤立物体 (Orphans / Fixed Bodies)
         # -------------------------------------------------
@@ -471,13 +495,13 @@ class MujocoBuilderWithMesh:
 all_bodies = parse_editor3d_json.parse_editor3d_json("editor3dJson.json")
 
 # 2. 拓扑树结构
-auxiliaries=normalize_auxiliaries("editor3dJson.json")
-topology_tree = build_topology_tree(auxiliaries)
+auxiliaries = normalize_auxiliaries("editor3dJson.json")
+topology_forest = build_topology(auxiliaries)
 
 # 3. 运行构建
 try:
     builder = MujocoBuilderWithMesh("editor_data_mj_spec", asset_dir="my_assets")
-    builder.build(topology_tree, all_bodies)
+    builder.build(topology_forest, all_bodies)
 
     # 4. 获取 XML
     xml_content = builder.save_xml('test.xml')
@@ -492,9 +516,3 @@ except AttributeError as e:
     print("错误: 你的 mujoco 版本可能过低，不支持 MjSpec。")
     print("请运行: pip install --upgrade mujoco")
     print(f"详细错误: {e}")
-
-
-
-
-
-

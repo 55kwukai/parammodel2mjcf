@@ -1,3 +1,11 @@
+Metadata-Version: 2.1
+Name: param2mjcf
+Version: 0.1.0
+Summary: A tool to convert parametric models (JSON) to MJCF (XML) for MuJoCo physics simulation.
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
 # Parametric Model to MJCF Converter
 
 A Python tool to convert parametric model definitions (JSON format) into MuJoCo MJCF (XML) simulation files. This project parses component hierarchies, converts meshes, and builds the kinematic tree for physics simulation.

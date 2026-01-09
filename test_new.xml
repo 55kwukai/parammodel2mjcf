@@ -1,32 +1,32 @@
-<mujoco model="editor_data_mj_spec">
+<mujoco model="param_robot">
   <compiler angle="radian"/>
 
   <asset>
-    <mesh name="ekk7552gle_m0" content_type="model/obj" file="my_assets/ekk7552gle_m0.obj"/>
-    <mesh name="2h808ncmk2_m0" content_type="model/obj" file="my_assets/2h808ncmk2_m0.obj"/>
-    <mesh name="33ic2kf1j3_m0" content_type="model/obj" file="my_assets/33ic2kf1j3_m0.obj"/>
-    <mesh name="m18bmkl6f8_m0" content_type="model/obj" file="my_assets/m18bmkl6f8_m0.obj"/>
-    <mesh name="k55dj5llk7_m0" content_type="model/obj" file="my_assets/k55dj5llk7_m0.obj"/>
-    <mesh name="h78f75ee8f_m0" content_type="model/obj" file="my_assets/h78f75ee8f_m0.obj"/>
-    <mesh name="faban49gf0_m0" content_type="model/obj" file="my_assets/faban49gf0_m0.obj"/>
-    <mesh name="db1g38j2k0_m0" content_type="model/obj" file="my_assets/db1g38j2k0_m0.obj"/>
-    <mesh name="db1g38j2k0_m1" content_type="model/obj" file="my_assets/db1g38j2k0_m1.obj"/>
-    <mesh name="db1g38j2k0_m2" content_type="model/obj" file="my_assets/db1g38j2k0_m2.obj"/>
-    <mesh name="db1g38j2k0_m3" content_type="model/obj" file="my_assets/db1g38j2k0_m3.obj"/>
-    <mesh name="db1g38j2k0_m4" content_type="model/obj" file="my_assets/db1g38j2k0_m4.obj"/>
-    <mesh name="db1g38j2k0_m5" content_type="model/obj" file="my_assets/db1g38j2k0_m5.obj"/>
-    <mesh name="94d44fa58i_m0" content_type="model/obj" file="my_assets/94d44fa58i_m0.obj"/>
-    <mesh name="94d44fa58i_m1" content_type="model/obj" file="my_assets/94d44fa58i_m1.obj"/>
-    <mesh name="94d44fa58i_m2" content_type="model/obj" file="my_assets/94d44fa58i_m2.obj"/>
-    <mesh name="94d44fa58i_m3" content_type="model/obj" file="my_assets/94d44fa58i_m3.obj"/>
-    <mesh name="94d44fa58i_m4" content_type="model/obj" file="my_assets/94d44fa58i_m4.obj"/>
-    <mesh name="94d44fa58i_m5" content_type="model/obj" file="my_assets/94d44fa58i_m5.obj"/>
-    <mesh name="6f3d4719n3_m0" content_type="model/obj" file="my_assets/6f3d4719n3_m0.obj"/>
-    <mesh name="6f3d4719n3_m1" content_type="model/obj" file="my_assets/6f3d4719n3_m1.obj"/>
-    <mesh name="6f3d4719n3_m2" content_type="model/obj" file="my_assets/6f3d4719n3_m2.obj"/>
-    <mesh name="6f3d4719n3_m3" content_type="model/obj" file="my_assets/6f3d4719n3_m3.obj"/>
-    <mesh name="6f3d4719n3_m4" content_type="model/obj" file="my_assets/6f3d4719n3_m4.obj"/>
-    <mesh name="6f3d4719n3_m5" content_type="model/obj" file="my_assets/6f3d4719n3_m5.obj"/>
+    <mesh name="ekk7552gle_m0" content_type="model/obj" file="test_assets/ekk7552gle_m0.obj"/>
+    <mesh name="2h808ncmk2_m0" content_type="model/obj" file="test_assets/2h808ncmk2_m0.obj"/>
+    <mesh name="33ic2kf1j3_m0" content_type="model/obj" file="test_assets/33ic2kf1j3_m0.obj"/>
+    <mesh name="m18bmkl6f8_m0" content_type="model/obj" file="test_assets/m18bmkl6f8_m0.obj"/>
+    <mesh name="k55dj5llk7_m0" content_type="model/obj" file="test_assets/k55dj5llk7_m0.obj"/>
+    <mesh name="h78f75ee8f_m0" content_type="model/obj" file="test_assets/h78f75ee8f_m0.obj"/>
+    <mesh name="faban49gf0_m0" content_type="model/obj" file="test_assets/faban49gf0_m0.obj"/>
+    <mesh name="db1g38j2k0_m0" content_type="model/obj" file="test_assets/db1g38j2k0_m0.obj"/>
+    <mesh name="db1g38j2k0_m1" content_type="model/obj" file="test_assets/db1g38j2k0_m1.obj"/>
+    <mesh name="db1g38j2k0_m2" content_type="model/obj" file="test_assets/db1g38j2k0_m2.obj"/>
+    <mesh name="db1g38j2k0_m3" content_type="model/obj" file="test_assets/db1g38j2k0_m3.obj"/>
+    <mesh name="db1g38j2k0_m4" content_type="model/obj" file="test_assets/db1g38j2k0_m4.obj"/>
+    <mesh name="db1g38j2k0_m5" content_type="model/obj" file="test_assets/db1g38j2k0_m5.obj"/>
+    <mesh name="94d44fa58i_m0" content_type="model/obj" file="test_assets/94d44fa58i_m0.obj"/>
+    <mesh name="94d44fa58i_m1" content_type="model/obj" file="test_assets/94d44fa58i_m1.obj"/>
+    <mesh name="94d44fa58i_m2" content_type="model/obj" file="test_assets/94d44fa58i_m2.obj"/>
+    <mesh name="94d44fa58i_m3" content_type="model/obj" file="test_assets/94d44fa58i_m3.obj"/>
+    <mesh name="94d44fa58i_m4" content_type="model/obj" file="test_assets/94d44fa58i_m4.obj"/>
+    <mesh name="94d44fa58i_m5" content_type="model/obj" file="test_assets/94d44fa58i_m5.obj"/>
+    <mesh name="6f3d4719n3_m0" content_type="model/obj" file="test_assets/6f3d4719n3_m0.obj"/>
+    <mesh name="6f3d4719n3_m1" content_type="model/obj" file="test_assets/6f3d4719n3_m1.obj"/>
+    <mesh name="6f3d4719n3_m2" content_type="model/obj" file="test_assets/6f3d4719n3_m2.obj"/>
+    <mesh name="6f3d4719n3_m3" content_type="model/obj" file="test_assets/6f3d4719n3_m3.obj"/>
+    <mesh name="6f3d4719n3_m4" content_type="model/obj" file="test_assets/6f3d4719n3_m4.obj"/>
+    <mesh name="6f3d4719n3_m5" content_type="model/obj" file="test_assets/6f3d4719n3_m5.obj"/>
   </asset>
 
   <worldbody>

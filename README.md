@@ -1,13 +1,16 @@
 # Parametric Model to MJCF Converter
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+
 A Python tool to convert parametric model definitions (JSON format) into MuJoCo MJCF (XML) simulation files. This project parses component hierarchies, converts meshes, and builds the kinematic tree for physics simulation.
 
 ## Features
 
-- **JSON Parsing**: Extracts model instances and kinematic relations from Editor3D JSON.
-- **Topology Building**: Automatically constructs the kinematic tree (parent, child, joints) from flat auxiliary data.
-- **Mesh Processing**: Converts mesh data to Wavefront OBJ format and registers them in the MJCF.
-- **MJCF Generation**: Generates a valid `mujoco.MjSpec` and saves it as an XML file.
+- **JSON Parsing**: Extracts model instances and kinematic relations from Editor3D JSON
+- **Topology Building**: Automatically constructs the kinematic tree (parent, child, joints) from flat auxiliary data
+- **Mesh Processing**: Converts mesh data to Wavefront OBJ format and registers them in the MJCF
+- **MJCF Generation**: Generates a valid MuJoCo model and saves it as an XML file
 
 ## Installation
 
@@ -26,17 +29,20 @@ pip install -e .
 
 ### Command Line Interface
 
-The package provides a CLI script to convert files directly.
+After installation, the `param2mjcf` command will be available:
 
 ```bash
 # Basic usage
-python scripts/convert.py input.json
+param2mjcf input.json
 
 # Specify output file and asset directory
-python scripts/convert.py input.json --output my_robot.xml --assets ./my_assets
+param2mjcf input.json --output my_robot.xml --assets ./my_assets
+
+# Custom model name
+param2mjcf input.json --model-name my_robot
 
 # Detailed output (shows topology tree)
-python scripts/convert.py input.json -v
+param2mjcf input.json -v
 ```
 
 ### Python API
@@ -62,10 +68,11 @@ builder.save_xml("output.xml")
 ## Project Structure
 
 - `param2mjcf/`: Main package source code.
+    - `__init__.py`: Package initialization and exports.
+    - `cli.py`: CLI entry point.
     - `loader.py`: JSON parsing logic.
     - `topology.py`: Kinematic tree construction.
     - `generator.py`: MJCF XML generation.
+    - `types.py`: Data type definitions.
     - `utils.py`: Math and helper functions.
-- `scripts/`: Conversion scripts.
-    - `convert.py`: CLI entry point.
 - `archive/`: Old scripts (for reference).

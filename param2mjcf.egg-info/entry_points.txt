@@ -1,2 +1,0 @@
-[console_scripts]
-param2mjcf = param2mjcf.cli:main

@@ -13,7 +13,7 @@ def main():
     parser.add_argument("input_json", help="Path to the input JSON file (e.g., editor3dJson.json)")
     parser.add_argument("--output", "-o", default="model.xml", help="Output MJCF XML file path")
     parser.add_argument("--assets", "-a", default="assets", help="Directory to save generated assets (.obj files)")
-    parser.add_argument("--model-name", "-n", default="param_robot", help="Name of the MuJoCo model")
+    parser.add_argument("--model-name", "-n", default="model", help="Name of the MuJoCo model")
     parser.add_argument("--verbose", "-v", action="store_true", help="Print detailed topology info")
 
     args = parser.parse_args()

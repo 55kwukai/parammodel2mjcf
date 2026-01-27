@@ -3,7 +3,7 @@ import shutil
 import numpy as np
 import mujoco
 from typing import List, Dict, Set, Optional
-
+import re
 from .types import Pose
 from .utils import get_local_pose
 
@@ -245,6 +245,28 @@ class MujocoBuilderWithMesh:
 
     def save_xml(self, filename: str) -> str:
         xml_str = self.spec.to_xml()
+
+        # Calculate relative path from XML location to asset directory
+        xml_dir = os.path.dirname(os.path.abspath(filename))
+        asset_abs_path = os.path.abspath(self.asset_dir)
+        asset_rel_path = os.path.relpath(asset_abs_path, xml_dir)
+
+        # Replace full asset paths with just filenames in mesh file attributes
+        # The meshdir will handle the directory prefix
+        # Match file="path/to/assets/filename.obj" and replace with file="filename.obj"
+        xml_str = re.sub(
+            rf'file="{re.escape(self.asset_dir)}/([^"]+)"',
+            r'file="\1"',
+            xml_str
+        )
+
+        # Insert meshdir attribute into <compiler> tag
+        if '<compiler' in xml_str:
+            xml_str = xml_str.replace(
+                '<compiler',
+                f'<compiler meshdir="{asset_rel_path}"'
+            )
+
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(xml_str)
         return xml_str

@@ -1,4 +1,5 @@
 import os
+import shutil
 import numpy as np
 import mujoco
 from typing import List, Dict, Set, Optional
@@ -184,10 +185,28 @@ class MujocoBuilderWithMesh:
         for child in node.get("children", []):
             self._add_body_recursive(current_body, child, current_abs_pose)
 
+    def _clear_asset_dir(self):
+        """
+        Clear all files in the asset directory
+        """
+        if os.path.exists(self.asset_dir):
+            for filename in os.listdir(self.asset_dir):
+                file_path = os.path.join(self.asset_dir, filename)
+                try:
+                    if os.path.isfile(file_path) or os.path.islink(file_path):
+                        os.unlink(file_path)
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+                except Exception as e:
+                    print(f'Failed to delete {file_path}. Reason: {e}')
+
     def build(self, topology_forest: List[Dict], instances: List[Dict]):
         """
         Main build function
         """
+        # 0. Clear asset directory before generating new assets
+        self._clear_asset_dir()
+
         # 1. Prepare assets (Generate OBJ and register Mesh assets)
         self._prepare_assets(instances)
 

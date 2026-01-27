@@ -11,3 +11,7 @@ __pycache__/
 
 # Claude Code memory
 CLAUDE.md
+
+# Generated outputs (keep input.json as assets)
+examples/*/output.xml
+examples/*/assets/

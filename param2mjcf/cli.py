@@ -9,11 +9,28 @@ from .generator import MujocoBuilderWithMesh
 from .utils import print_auxiliaries, print_topology
 
 def main():
-    parser = argparse.ArgumentParser(description="Convert Editor3D Parametric Model (JSON) to MJCF (XML)")
-    parser.add_argument("input_json", help="Path to the input JSON file (e.g., editor3dJson.json)")
-    parser.add_argument("--output", "-o", default="model.xml", help="Output MJCF XML file path")
-    parser.add_argument("--assets", "-a", default="assets", help="Directory to save generated assets (.obj files)")
-    parser.add_argument("--model-name", "-n", default="model", help="Name of the MuJoCo model")
+    parser = argparse.ArgumentParser(
+        description="Convert Editor3D Parametric Model (JSON) to MJCF (XML)",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Basic usage (auto-infer output paths from input directory)
+  param2mjcf examples/three_drawers/input.json
+
+  # Specify custom output file
+  param2mjcf examples/three_drawers/input.json -o custom_output.xml
+
+  # Specify all paths explicitly
+  param2mjcf input.json -o output.xml -a assets/ -n my_model
+        """
+    )
+    parser.add_argument("input_json", help="Path to the input JSON file")
+    parser.add_argument("--output", "-o", default=None,
+                       help="Output MJCF XML file path (default: <input_dir>/output.xml)")
+    parser.add_argument("--assets", "-a", default=None,
+                       help="Directory to save generated assets (default: <input_dir>/assets/)")
+    parser.add_argument("--model-name", "-n", default=None,
+                       help="Name of the MuJoCo model (default: derived from input directory name)")
     parser.add_argument("--verbose", "-v", action="store_true", help="Print detailed topology info")
 
     args = parser.parse_args()
@@ -22,7 +39,38 @@ def main():
         print(f"Error: Input file '{args.input_json}' does not exist.")
         sys.exit(1)
 
+    # Smart path inference
+    input_dir = os.path.dirname(args.input_json)
+    input_basename = os.path.basename(args.input_json)
+
+    # If no output specified, infer from input directory
+    if args.output is None:
+        if input_dir:
+            args.output = os.path.join(input_dir, "output.xml")
+        else:
+            args.output = "output.xml"
+
+    # If no assets directory specified, infer from input directory
+    if args.assets is None:
+        if input_dir:
+            args.assets = os.path.join(input_dir, "assets")
+        else:
+            args.assets = "assets"
+
+    # If no model name specified, infer from directory name
+    if args.model_name is None:
+        if input_dir:
+            # Use the parent directory name (e.g., "three_drawers" from "examples/three_drawers")
+            dir_name = os.path.basename(input_dir)
+            args.model_name = dir_name if dir_name else "model"
+        else:
+            # Use input filename without extension
+            args.model_name = os.path.splitext(input_basename)[0]
+
     print(f"Loading {args.input_json}...")
+    print(f"Output will be saved to: {args.output}")
+    print(f"Assets will be saved to: {args.assets}/")
+    print(f"Model name: {args.model_name}")
 
     # 1. Parse Data
     try:

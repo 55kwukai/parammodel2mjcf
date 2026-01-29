@@ -5,6 +5,15 @@
 
 A Python tool to convert parametric model definitions (JSON format) into MuJoCo MJCF (XML) simulation files. This project parses component hierarchies, converts meshes, and builds the kinematic tree for physics simulation.
 
+
+## Demo
+
+<p align="center">
+  <img src="docs/images/demo.gif" alt="Cabinet Animation Demo" width="600">
+  <br>
+  <em>Generated interactive physics model in MuJoCo</em>
+</p>
+
 ## Features
 
 - **JSON Parsing**: Extracts model instances and kinematic relations from Editor3D JSON

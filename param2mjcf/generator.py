@@ -78,9 +78,9 @@ class MujocoBuilderWithMesh:
 
     def _get_joint_enum(self, raw_type: str):
         t = str(raw_type).lower()
-        if "slider" in t or "2" in t:
+        if "slide" in t or "2" in t:
             return mujoco.mjtJoint.mjJNT_SLIDE
-        if "hinge" in t:
+        if "hinge" in t or "1" in t:
             return mujoco.mjtJoint.mjJNT_HINGE
         return None
 

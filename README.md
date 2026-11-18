@@ -23,15 +23,21 @@ A Python tool to convert parametric model definitions (JSON format) into MuJoCo 
 
 ## Installation
 
-Requires Python 3.8+.
+Install with Conda using the pinned environment in `environment.yml`
+(validated on macOS Apple Silicon). `pyproject.toml` defines the Python package
+and CLI entry point.
 
 ```bash
 # Clone the repository
-git clone <repository_url>
-cd paramModel2MJCF
+git clone https://github.com/55kwukai/parammodel2mjcf.git
+cd parammodel2mjcf
 
-# Install dependencies
-pip install -e .
+# Create the pinned environment
+conda env create -n param2mjcf -f environment.yml
+conda activate param2mjcf
+
+# Install the project using the environment's dependencies
+python -m pip install --no-deps --no-build-isolation -e .
 ```
 
 ## Usage
